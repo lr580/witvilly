@@ -1,4 +1,4 @@
-const appSecret = 'lr580'; //保密
+const appSecret = 'lr5810'; //保密
 export {
     appSecret
 };
