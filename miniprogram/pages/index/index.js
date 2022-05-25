@@ -1,7 +1,9 @@
 // pages/index/index.js
 import {
-    author
-} from '../../js/dateCalc.js';
+    Date2Str,
+    Str2Date
+} from '../../js/common/dateCalc.js';
+import {uploadImages} from '../../js/common/upload';
 Page({
 
     /**
@@ -16,9 +18,20 @@ Page({
      */
     onLoad: function (options) {
         this.setData({
-            testInfo: author
+            testInfo: Date2Str(Str2Date(20220228))
         });
-        console.log(author)
+        // console.log(uploadImages());
+        // (async () => {
+        //     const p = await new Promise(resolve => {
+        //         setTimeout(() => resolve("hello async/await"), 1000);
+        //     });
+        //     console.log(p);
+        // })();
+        // try{
+        //     const userInfo = await 
+        // }catch(err){
+
+        // }
     },
 
     /**
