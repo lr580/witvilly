@@ -1,6 +1,6 @@
 //异步简化库
 function promisify(fn) {
-    return async function(args) {
+    return async function (args) {
         return new Promise((resolve, reject) => {
             fn({
                 ...(args || {}),
@@ -15,7 +15,7 @@ Promise.prototype.ignoreError = function () {
     return this.catch(() => {});
 };
 
-const allFuncs = ['login','request','getUserInfo'];
+const allFuncs = ['login', 'request', 'getUserInfo'];
 
 function toAsync(names) { //若...names是可变参数
     // 这里 names 期望是一个数组
@@ -33,6 +33,10 @@ function toAsync(names) { //若...names是可变参数
 
 const awx = toAsync(allFuncs);
 
+const acloud = promisify(wx.cloud.callFunction);
+
 export {
-    promisify,awx
+    promisify,
+    awx,
+    acloud
 };

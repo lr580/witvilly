@@ -122,6 +122,24 @@ memo
 
 异步操作简化库。[参考](http://news.558idc.com/122801.html)
 
+- `promisify(f)` ，传入一个函数，将它强转异步函数。此时在 `async` 里用 `await` 可以接收它的值(注意`try..catch..finally`)，如：
+
+  ```js
+  const acloud = promisify(wx.cloud.callFunction);
+  try {
+      console.log(1);//为了表明是异步而在异步前输出点东西
+      const openidPack = await acloud({
+          name: 'getopenid'
+      });
+      const openid = openidPack.result.openid;
+      console.log(openid);
+  } catch (err) {} finally {}
+  ```
+
+- `acloud` 即 `wx.cloud.callFunction` 的异步函数
+
+- `awx` 对象，是被用 `promisify` 打包了的改编 `wx` 异步函数。
+
 
 
 #### upload
@@ -129,6 +147,16 @@ memo
 上传文件、图片等专用。
 
 - 
+
+
+
+### 云函数
+
+在根目录(`miniprogram`外)的`project.config.json`里的`cloudfunctionRoot`点明了云函数的定义位置(在本地定义的)，对着打开这个位置，右击新建`node.js`可以新建一个函数，天然会返回`openid`。所以用`wx.cloud.callFunction`跑它就行。
+
+目前定义的函数有：
+
+- `getopenid` ，传入任意，返回带`openid`，对回调返回体用`.result.openid`拾取
 
 
 
