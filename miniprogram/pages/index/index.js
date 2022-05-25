@@ -3,7 +3,13 @@ import {
     Date2Str,
     Str2Date
 } from '../../js/common/dateCalc.js';
-import {uploadImages} from '../../js/common/upload';
+import {
+    uploadImages
+} from '../../js/common/upload';
+import {
+    awx,
+    promisify
+} from '../../js/common/promisify.js';
 Page({
 
     /**
@@ -16,22 +22,25 @@ Page({
     /**
      * 生命周期函数--监听页面加载
      */
-    onLoad: function (options) {
+    onLoad: async function (options) {
         this.setData({
             testInfo: Date2Str(Str2Date(20220228))
         });
-        // console.log(uploadImages());
-        // (async () => {
-        //     const p = await new Promise(resolve => {
-        //         setTimeout(() => resolve("hello async/await"), 1000);
-        //     });
-        //     console.log(p);
-        // })();
-        // try{
-        //     const userInfo = await 
-        // }catch(err){
+        try {
+            console.log(1);
+            // const res = await asyncLogin();
+            const {
+                code
+            } = await awx.login();
+            console.log(code);
+            // do something with code
+        } catch (err) {
+            // login error
+        } finally {
+            // promisify 里没有专门注入 complete 回调，
+            // 因为 complete 的内容可以写在这里
 
-        // }
+        }
     },
 
     /**

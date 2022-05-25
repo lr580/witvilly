@@ -1,18 +1,23 @@
-// function promisify(fn){
-//     return async function (args){
-//         return new Promise((resolve,reject)=>{
-//             fn({
-
-//             })
-//         })
-//     }
-// }
+//异步简化库
+function promisify(fn) {
+    return async function(args) {
+        return new Promise((resolve, reject) => {
+            fn({
+                ...(args || {}),
+                success: res => resolve(res),
+                fail: err => reject(err)
+            });
+        });
+    };
+}
 
 Promise.prototype.ignoreError = function () {
     return this.catch(() => {});
 };
 
-function toAsync(...names) { //可变参数
+const allFuncs = ['login','request','getUserInfo'];
+
+function toAsync(names) { //若...names是可变参数
     // 这里 names 期望是一个数组
     return (names || [])
         .map(name => ({
@@ -26,6 +31,8 @@ function toAsync(...names) { //可变参数
         }, {});
 }
 
+const awx = toAsync(allFuncs);
+
 export {
-    toAsync
+    promisify,awx
 };

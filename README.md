@@ -118,6 +118,12 @@ memo
 
 
 
+#### promisify
+
+异步操作简化库。[参考](http://news.558idc.com/122801.html)
+
+
+
 #### upload
 
 上传文件、图片等专用。

@@ -21,7 +21,7 @@ async function uploadImages(cnt = 9) {
                     imagePaths.push(destPath);
                     // console.log((new Date()).getTime());
                     // console.log(destPath);
-                    wx.cloud.uploadFile({
+                    wx.cloud.uploadFile({ 
                         filePath: tempFilePath,
                         cloudPath: destPath,
                         // url: destRoot,
