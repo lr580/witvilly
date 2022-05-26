@@ -12,6 +12,8 @@
 
 ### 数据字典
 
+#### 数据类型定义
+
 引用数据字典的条目用下划线标记。
 
 | 条目     | 类型   | 描述                                     |
@@ -21,10 +23,22 @@
 | 日期     | number | 定义见`变量和函数定义-common-dateCalc`   |
 | 用户类别 | number | 0未知,1村民,2基层干部,3高层干部          |
 | 头像路径 | string | 以 `/avatar/` 为相对路径，格式 `xxx.xxx` |
-| stamp    | number | 时间毫秒的时间戳                         |
-| rich     | string | HTML格式富文本                           |
+| 时间戳   | number | 时间毫秒的时间戳                         |
+| 富文本   | string | HTML格式富文本                           |
+| 标签     | string | 互异字符串                               |
+| 重要级   | number | 优先级 [0,10] 默认5 整数，值越大越重要   |
+| 微信号   | string | 与真实微信号唯一对应，认为是常量         |
+| 分组     | string | 互异字符串                               |
+| 文体     | number | 0未知,1备忘录,2村民备注,4政务公告        |
+| 血缘类型 | number | 0未知,1亲->子(非对称),2婚姻(对称)        |
 
-> 备注：关于性别：(懒得用下标对应了，反正也不缺这点内存) 
+> 备注：
+>
+> - 关于性别：(懒得用下标对应了，反正也不缺这点内存) 
+> - 标签不使用下标对应了，以自己为主键
+> - 之所以在时间戳之外还有一个日期(即日期完全可以被时间戳替代)类型，是作备用使用，当前版本未使用日期类型，只使用了时间戳类型
+>
+> 
 
 
 
@@ -36,11 +50,15 @@
 
 富文本图片文件夹：`rich`
 
+附件文件夹：`accessory`
 
 
-图片的统一文件名：当前时间戳，即 <u>stamp</u> = `(new Date()).getTime()` ，若同时上传多张，每次自增 1。
+
+图片的统一文件名：当前时间戳，即 <u>时间戳</u> = `(new Date()).getTime()` ，若同时上传多张，每次自增 1。
 
 > 实践依据：不可能有两个用户在 9 毫秒同时上传 9 张图片。所以可以认为零冲突。不使用 md5 加密，是因为时间戳排序方便按时间查询。
+
+附件的统一命名：当前时间戳
 
 
 
@@ -50,16 +68,20 @@
 
 cadre
 
-- `_openid` <u>ID</u> 主键
-- `registerDate` <u>日期</u> 注册日期
+- `_openid` <u>ID</u> 
+- `registerDate` <u>时间戳</u> 注册日期 主键
 - `avatar` <u>头像路径</u>
 - `name` string 真名
 - `sex` <u>性别</u> 
-- `birthday` <u>日期</u> 出生日期 
+- `birthday` <u>时间戳</u> 出生日期 
 - `userType` <u>用户类别</u>
 - `prifile` string 个人介绍
 - `phone` string 手机号
 - `address` string 工作地址
+- `governs` array(<u>时间戳</u>) 管理的群众
+- `memos` array(<u>时间戳</u>) 拥有的备忘录+政务通知
+- `plans` array(<u>时间戳</u>) 拥有的计划
+- `subordinates` array(<u>时间戳</u>) 下属
 
 
 
@@ -67,12 +89,18 @@ cadre
 
 people
 
-- `_openid` <u>ID</u>
+- `id` <u>时间戳</u> 创建日期 主键
+- `_openid` <u>ID</u> 
 - `name` string 真名
 - `avatar` <u>头像路径</u> 
-- `birthday` <u>日期</u> 出生日期 
+- `birthday` <u>时间戳</u> 出生日期 
 - `income` string 收入描述
 - `jobs` array(string) 职业
+- `addresses` array(string) 地址
+- `contacts` array(string) 联系方式
+- `wechat` <u>微信号</u> 
+- `groups` array(<u>分组</u>)
+- `updateDate` <u>时间戳</u> 最后更新时间
 
 
 
@@ -80,14 +108,88 @@ people
 
 memo
 
-- `id` <u>stamp</u> 
-- `text` 
+- `id` <u>时间戳</u> 创建日期 主键
+- `text` <u>富文本</u> 正文
+- `title` string 标题
+- `tags` array(<u>标签</u>)
+- `abstract` string 摘要
+- `updateDate` <u>时间戳</u> 最后更新时间
+- `importance` <u>重要度</u> 
+- `accessoroies` array(<u>时间戳</u>) 附件主键列表，当前版本无用
+- `type` <u>文体</u> 
+- `relatedPeople` array(<u>时间戳</u>) 外键，关联的群众
+- `private` bool 是否不允许上级查看
 
 
+
+#### 附件
+
+accessory
+
+当前版本未实现。从属关系由拥有主体单向定义，不作冗余。
+
+- `id`  <u>时间戳</u> 主键
+- `name` string 附件显示名
+- `desc` string 附件描述，可选
+
+
+
+#### 政务通知
+
+broadcast
+
+未来实现。
+
+- `id` <u>时间戳</u> 通知主键 创建日期
+- `source` array(<u>时间戳</u>) 广播通知
+- `audience` array(<u>微信号</u>) 通知受众(群众或干部)
+- `sendDate` <u>时间戳</u> 发送日期
+- `sentAudience` array(<u>时间戳</u>) 已成功发出的受众
+- `receivedAudience` array(<u>时间戳</u>) 已成功收到的受众
+- `desc` string 通知备注
+
+
+
+#### 编辑锁
+
+editlock
+
+- `id` <u>时间戳</u> 主键，编辑开始时间
+- `memoid` <u>时间戳</u> 外键
+- `cadreid` <u>时间戳</u> 外键
+
+
+
+#### 计划
+
+plan
+
+- `id` <u>时间戳</u> 创建日期 主键
+- `ddl` <u>时间戳</u> 截止日期
+- `start` <u>时间戳</u> 开始日期
+- `remind` <u>时间戳</u> 提醒日期
+- `title` string 计划名
+- `detail` <u>富文本</u> 
+- `finished` bool
+- `importance` <u>重要度</u> 
+- `private` bool 是否不允许上级查看
+
+
+
+#### 亲属关联
+
+relative
+
+- `id` <u>时间戳</u> 创建日期 主键
+- `type` <u>血缘类型</u>
+- `lfs` <u>时间戳</u> 拥有该关系的主语群众
+- `rfs` <u>时间戳</u> 拥有该关系的谓语群众
 
 
 
 ## 代码文件结构
+
+待补充
 
 
 
@@ -157,6 +259,10 @@ memo
 目前定义的函数有：
 
 - `getopenid` ，传入任意，返回带`openid`，对回调返回体用`.result.openid`拾取
+
+
+
+### 全局变量
 
 
 

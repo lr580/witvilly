@@ -1,24 +1,13 @@
 // app.js
-import {
-  acloud
-} from 'js/common/promisify';
 import * as getopenid from 'js/common/getopenid';
-import {
-  createIfNotExist as createCadreIfNotExist
-} from 'js/base/controllerCadre';
-import {
-  loading,
-  loaded
-} from 'js/common/loader';
+import * as cadre from 'js/base/cadreCtrl';
 App({
   onLaunch: async function () {
-    loading('加载中', true);
     this.timeBegin = new Date(); //调试：程序初始化用时统计
     this.globalData = {
       openid: '',
     };
 
-    console.log(1);
     this.cloudInitParam = {
       env: 'cloud1-4gfwdpzcf1fa51e4',
       traceUser: true,
@@ -46,11 +35,9 @@ App({
 
       const db = wx.cloud.database();
       const c_cadre = db.collection('cadre');
-      // createCadreIfNotExist(c_cadre, openid);
-      loaded();
+      
     } catch (err_getopenid) {
       console.log('err_getopenid', err_getopenid);
-      loaded();
     }
   }
 });
