@@ -1,11 +1,10 @@
-// app.js
 import * as getopenid from 'js/common/getopenid';
-import * as cadre from 'js/base/cadreCtrl';
 import * as user from 'js/base/userCtrl';
+import * as io from 'js/common/io';
 App({
     onLaunch: async function () {
-        console.log('App开始初始化');
-        this.timeBegin = new Date(); //调试：程序初始化用时统计
+        io.out('app开始初始化');
+        io.time();
         this.globalData = {};
 
         this.cloudInitParam = {
@@ -18,32 +17,33 @@ App({
             wx.cloud.init(this.cloudInitParam); //实验表明如果这里加await会慢大约300ms
         }
 
-
         this.main(); //程序逻辑初始化
     },
 
     main: async function () {
         try {
             this.globalData.openid = await getopenid.getopenid(); //实验表明这个await的用时是0.5s-1.2s
-            let openid = this.globalData.openid; //简写
-            console.log('openid:', this.globalData.openid);
-
             if (!wx.cloud) { //极端情况就等待一下(不大可能触发)
                 await wx.cloud.init(this.cloudInitParam);
             }
-            console.log('用时(ms):', (new Date().getTime()) - this.timeBegin.getTime());
- 
-            const db = wx.cloud.database();
-            const c_cadre = db.collection('cadre');
+            io.out('openid:', this.globalData.openid);
+            io.timeLog();
 
-            const hasInfo = await user.getUser(openid);
-            // const hasInfo = await wx.cloud.database().collection('cadre').where({
-            //     _openid: 'oUtoa5VrERTUmzFHFHkb8pDCZ3H4' 
-            // }).count();
-            console.log('用时(ms):', (new Date().getTime()) - this.timeBegin.getTime());
-            console.log(hasInfo);
+            this.globalData.userInfo = await user.getUser();
+            io.timeLog();
+            io.log('userInfo:', this.globalData.userInfo);
+            if (this.globalData.userInfo.userType < 0) {
+                throw new Error('信息获取失败');
+            } else if (this.globalData.userInfo.userType == 0) {
+                wx.navigateTo({
+                    url: '/pages/userInfo/userInfo?type=register',
+                });
+            } else {
+
+            }
+
         } catch (err_getopenid) {
-            console.log('err_getopenid', err_getopenid);
+            io.err(err_getopenid, '网络异常，初始化失败，请重启');
         }
     }
 });

@@ -1,4 +1,4 @@
-// pages/user.js
+import * as io from '../../js/common/io';
 Page({
 
     /**
@@ -12,9 +12,15 @@ Page({
      * 生命周期函数--监听页面加载
      */
     onLoad(options) {
-        console.log('首页启动完毕');
+        io.log('user页启动完毕');
         getApp().handler = this;
     },
+
+    // gotoRegister(){
+    //     wx.navigateTo({
+    //       url: 'userInfo?type=register',
+    //     });
+    // },
 
     /**
      * 生命周期函数--监听页面初次渲染完成

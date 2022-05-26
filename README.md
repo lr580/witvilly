@@ -16,21 +16,21 @@
 
 引用数据字典的条目用下划线标记。
 
-| 条目     | 类型   | 描述                                     |
-| -------- | ------ | ---------------------------------------- |
-| ID       | string | 微信API获取的 `openID`                   |
-| 性别     | string | `男`,`女`,`未知`(或空)                   |
-| 日期     | number | 定义见`变量和函数定义-common-dateCalc`   |
-| 用户类别 | number | 0未知(未注册),1村民,2基层干部,3高层干部  |
-| 头像路径 | string | 以 `/avatar/` 为相对路径，格式 `xxx.xxx` |
-| 时间戳   | number | 时间毫秒的时间戳                         |
-| 富文本   | string | HTML格式富文本                           |
-| 标签     | string | 互异字符串                               |
-| 重要级   | number | 优先级 [0,10] 默认5 整数，值越大越重要   |
-| 微信号   | string | 与真实微信号唯一对应，认为是常量         |
-| 分组     | string | 互异字符串                               |
-| 文体     | number | 0未知,1备忘录,2村民备注,4政务公告        |
-| 血缘类型 | number | 0未知,1亲->子(非对称),2婚姻(对称)        |
+| 条目     | 类型   | 描述                                           |
+| -------- | ------ | ---------------------------------------------- |
+| ID       | string | 微信API获取的 `openID`                         |
+| 性别     | string | `男`,`女`,`未知`(或空)                         |
+| 日期     | number | 定义见`变量和函数定义-common-dateCalc`         |
+| 用户类别 | number | 0未知(未注册),1村民,2基层干部,3高层干部,-1异常 |
+| 头像路径 | string | 以 `/avatar/` 为相对路径，格式 `xxx.xxx`       |
+| 时间戳   | number | 时间毫秒的时间戳                               |
+| 富文本   | string | HTML格式富文本                                 |
+| 标签     | string | 互异字符串                                     |
+| 重要级   | number | 优先级 [0,10] 默认5 整数，值越大越重要         |
+| 微信号   | string | 与真实微信号唯一对应，认为是常量               |
+| 分组     | string | 互异字符串                                     |
+| 文体     | number | 0未知,1备忘录,2村民备注,4政务公告              |
+| 血缘类型 | number | 0未知,1亲->子(非对称),2婚姻(对称)              |
 
 > 备注：
 >
@@ -66,9 +66,9 @@
 
 ### 对象定义
 
-#### 干部
+#### 用户
 
-cadre
+cadre。主要是基层干部
 
 - `_openid` <u>ID</u> 
 - `registerDate` <u>时间戳</u> 注册日期 主键
@@ -84,6 +84,7 @@ cadre
 - `memos` array(<u>时间戳</u>) 拥有的备忘录+政务通知
 - `plans` array(<u>时间戳</u>) 拥有的计划
 - `subordinates` array(<u>时间戳</u>) 下属
+- `authorized` bool 是否通过实名认证(现阶段默认true)
 
 
 
@@ -204,7 +205,23 @@ relative
 ##### app.globalData
 
 - `openid` 运行程序自动获取
+- `userInfo` 数据库当前用户的 `cadre` 数据
+
+
+
+##### app
+
+不存在 `app.globalData` 但存在 `app` 的、可供调用的内容
+
 - `handler` 页面 this 传引用，可以用于操作一个页面，默认是用户页 `user`，在其 `onLoad` 时自动获取
+
+
+
+#### global
+
+在云存储 global 集合的 `_id` 为 `'0'` 的数据。
+
+- `forge` 骗审专用，是否开启功能限制模式，审核阶段请 true，否则 false
 
 
 
@@ -275,6 +292,38 @@ Object 功能拓展。[深复制参考](https://blog.csdn.net/weixin_46074961/ar
 
 
 
+##### io
+
+调试和弹窗输出，并提供频繁点击锁。
+
+调试输出可以手动关闭。默认每种输出都有调试输出
+
+- `err(cerr, outmsg = '网络错误，请重试', duration = 1000)` 弹窗报错
+
+- `print(info, icon = 'none', duration = 1000)` 弹窗输出
+
+- `log` / `out` 调试输出，同 `console.log`。可以批量关闭。
+
+- 同理，有 `time` , `timeEnd` , `timeOut` 函数，代替 `console` 的对应函数。
+
+- `helpInput0(handler, key = '', dest = '', funcName = '', obj = 'input')` 
+
+  生成一个 input 的 `bindinput` ，函数名为 `funcName` 默认为 `input_`+key，存储值为 `handler.data.obj.dest`，其 `dest` 默认为 key。每次输入时将输入值放到该变量里，调用 `handler.setData`。其中 `handler` 是页面 page 的传引用 this。若 `handler` 没有这个 `dest` 或 `obj` 自动新定义一个。
+
+- `helpInput0(handler, key = '', dest = '', funcName = '')` 
+
+  生成一个 input 的 `bindinput` ，函数名为 `funcName` 默认为 `input_`+key，存储值为 `handler.data.dest`，其 `dest` 默认为 `i_`+key。每次输入时将输入值放到该变量里，调用 `handler.setData`。其中 `handler` 是页面 page 的传引用 this。若 `handler` 没有这个 `dest` 自动新定义一个。
+
+- `initLock(handler, lockname = '1')` 
+
+  为 page 添加一个防频繁点击锁，锁ID为 `lockname`。之后使用 `checklock_lockname` 来加锁，若之前已经锁了那么就返回 true(可以直接 return)，用 `unlock_lockname` 来解锁。可以在 `handler.data.locks.lockname` 看到这个布尔值变量锁。
+
+- `lockfunc(handler, lockname, func, async = false) ` 
+
+  在上文的基础上，绑定一个锁函数 `func` ，函数名为 `lockname` ，执行该函数体。目前暂时只有无参函数，如果想要有参用 `initLock`。
+
+
+
 ##### upload
 
 上传文件、图片等专用。
@@ -285,7 +334,18 @@ Object 功能拓展。[深复制参考](https://blog.csdn.net/weixin_46074961/ar
 
 #### base
 
+##### userCtrl
+
+用户普遍登录注册注销等功能实现。
+
+- `getUser()` 获取当前用户 `cadre` 信息，若不存在则创建，返回信息。
+- `update(infos)` 将更新当前用户的信息同时作用于云存储和本地。
+
+
+
 ##### cadreCtrl
+
+
 
 
 
