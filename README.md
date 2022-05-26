@@ -37,6 +37,7 @@
 > - 关于性别：(懒得用下标对应了，反正也不缺这点内存) 
 > - 标签不使用下标对应了，以自己为主键
 > - 之所以在时间戳之外还有一个日期(即日期完全可以被时间戳替代)类型，是作备用使用，当前版本未使用日期类型，只使用了时间戳类型
+> - 用户类型的十位为 1 时，代表已注册但退出了登录。十位为 2 时，代表账号已删除。
 >
 > 
 
@@ -265,6 +266,9 @@ Object 功能拓展。[深复制参考](https://blog.csdn.net/weixin_46074961/ar
 
 - `Date2Str(src)` , `src` 是 Date ，返回  `yyyymmddhhmmss` 格式整数
 - `Str2Date(src)` , `src` 是 `strDate` ，返回 Date 。
+- `get_ymd(v)` 对 Date 返回 `{yy, mm, dd}`
+- `get_ymdhms(v)` 对 Date 返回 `{yy, MM, dd, hh, mm, ss}`
+- `print(v, type = 0)` 对 Date / <u>时间戳</u> 返回 `%04d/%02d/%02d` ，若 type = 1，加多 `%02d:%02d:%02d`
 
 
 
@@ -339,7 +343,12 @@ Object 功能拓展。[深复制参考](https://blog.csdn.net/weixin_46074961/ar
 用户普遍登录注册注销等功能实现。
 
 - `getUser()` 获取当前用户 `cadre` 信息，若不存在则创建，返回信息。
+
 - `update(infos)` 将更新当前用户的信息同时作用于云存储和本地。
+
+- `refresh(handler, key = 'userInfo', decor = true)` 
+
+  对 page 页面的 data 的 key 值更新当前用户数据，若 `decor`，那么将数据更新为显示格式。
 
 
 
@@ -365,3 +374,6 @@ Object 功能拓展。[深复制参考](https://blog.csdn.net/weixin_46074961/ar
 
 ## 细节备注
 
+### 冷知识
+
+特殊字符在 `wxml` 的渲染：[参考](http://t.zoukankan.com/lguow-p-10118347.html)  ，在 `text` 加 `decode="true"`

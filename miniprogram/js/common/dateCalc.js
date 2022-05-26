@@ -55,3 +55,36 @@ export {
     Date2Str,
     Str2Date
 };
+
+export function get_ymd(v) {
+    return {
+        yy: v.getFullYear(),
+        mm: v.getMonth() + 1,
+        dd: v.getDate(),
+    };
+}
+
+export function get_ymdhms(v) {
+    return {
+        yy: v.getFullYear(),
+        MM: v.getMonth() + 1,
+        dd: v.getDate(),
+        hh: v.getHours(),
+        mm: v.getMinutes(),
+        ss: v.getSeconds(),
+    };
+}
+
+export function print(v, type = 0) {
+    if(v==0){
+        return '未设置';
+    }
+    v = new Date(v);
+    if (type == 0) {
+        return v.format('yyyy/MM/dd');
+    } else if (type == 1) {
+        return v.format('yyyy/MM/dd hh:mm:ss');
+    } else {
+        return '';
+    }
+}

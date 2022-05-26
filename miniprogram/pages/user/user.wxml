@@ -1,2 +1,18 @@
 <text>这是一个用户首页</text>
-<text wx:if="{{1}}">QwQ</text>
+<view wx:if="{{userInfo && userInfo.userType!='未登录' && userInfo.userType!='已注销'}}">
+    <view><text decode="true">具体显示多少信息你看着办吧 &gt;_&lt;</text> </view>
+
+    <image src="{{userInfo.avatar}}"></image>
+    <view>姓名：{{userInfo.name}}</view>
+    <view>性别：{{userInfo.sex}}</view>
+    <view>出生日期：{{userInfo.sex}}</view>
+    <view>注册日期：{{userInfo.registerDate}}</view>
+    <view>职位：{{userInfo.userType}}</view>
+
+    <button bindtap="unlogin">点我退出登录</button>
+</view>
+<view wx:elif="{{userInfo && userInfo.userType == '未登录'}}">
+    <view>请先登录</view>
+    <button bindtap="login">点我登录</button>
+</view>
+<view wx:else>加载中……</view>

@@ -1,4 +1,5 @@
 import * as io from '../../js/common/io';
+import * as user from '../../js/base/userCtrl';
 Page({
 
     /**
@@ -14,13 +15,20 @@ Page({
     onLoad(options) {
         io.log('user页启动完毕');
         getApp().handler = this;
+        let thee = this;
+        io.lockfunc(this, 'unlogin', async function () {
+            await user.update({
+                userType: Math.round(getApp().globalData.userInfo.userType % 10 + 10)
+            });
+            user.refresh(thee);
+        }, true);
+        io.lockfunc(this, 'login', async function () {
+            await user.update({
+                userType: Math.round(getApp().globalData.userInfo.userType % 10)
+            });
+            user.refresh(thee);
+        }, true);
     },
-
-    // gotoRegister(){
-    //     wx.navigateTo({
-    //       url: 'userInfo?type=register',
-    //     });
-    // },
 
     /**
      * 生命周期函数--监听页面初次渲染完成
@@ -33,7 +41,7 @@ Page({
      * 生命周期函数--监听页面显示
      */
     onShow() {
-
+        user.refresh(this);
     },
 
     /**

@@ -20,7 +20,7 @@ Page({
         });
         io.helpInput(this, 'name');
         io.helpInput(this, 'address');
-        let thee = this;
+        let thee = this; //下面不thee不行
         io.lockfunc(this, 'save', async function () {
             thee.data.input.userType = 2; //当前版本默认用户为2
             if (thee.data.input.name.length == 0) {
@@ -35,15 +35,7 @@ Page({
         }
     },
 
-    // r_save() {
-    //     this.data.input.userType = 2; //当前版本默认用户为2
-    //     if (this.data.input.name.length == 0) {
-    //         io.print('请填写您的姓名');
-    //         return;
-    //     }
-    // },
-
-    select_userType(param) {
+    select_userType(param) { //暂时无用
         io.out('select user type:', param);
     },
 

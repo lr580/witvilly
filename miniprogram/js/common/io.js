@@ -101,7 +101,6 @@ export function lockfunc(handler, lockname, func, async = false) {
             handler['unlock_' + lockname]();
         }
     }
-    // out(handler);
 }
 
 export function initlock(handler, lockname = '1') {

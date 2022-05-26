@@ -1,6 +1,7 @@
 // import * as asy from "../common/promisify";
 import * as obj from '../common/obj';
 import * as io from '../common/io';
+import * as date from '../common/dateCalc';
 var col = null;
 var _ = null;
 var app = null;
@@ -12,7 +13,7 @@ function get_col() {
         app = getApp();
     }
 }
-//获取用户信息，若不存在则创建
+//获取用户信息，若不存在则创建，获取成功显示出来(如果定义了handler)
 export async function getUser() {
     get_col();
     let res = getTemplate('', -1);
@@ -20,7 +21,6 @@ export async function getUser() {
         let got = await col.where({
             _openid: app.globalData.openid,
         }).get();
-
         if (got.data.length == 0) {
             var newData = getTemplate(app.globalData.openid);
             await col.add({
@@ -30,11 +30,13 @@ export async function getUser() {
         } else {
             res = got.data[0]; //作用域问题
         }
-
     } catch (err) {
         io.err(err);
         return getTemplate('', -1);
     }
+    // if (app.handler) {
+    //     refresh(app.handler);
+    // } 不知道为什么在这里不行，但在app.js就可以
     return res;
 }
 
@@ -78,4 +80,28 @@ export async function update(infos) {
     } catch (err) {
         io.err(err, '更新失败，请重试');
     }
+}
+
+export const typeChar = ['未登录', '群众', '基层干部', '高层干部', '其他'];
+export function refresh(handler, key = 'userInfo', decor = true) {
+    get_col();
+    if (app.globalData.userInfo == undefined) { //全局信息未加载出来
+        return;
+    }
+    let wrap = {}
+    wrap[key] = obj.clone(app.globalData.userInfo);
+    if (decor) {
+        wrap[key].registerDate = date.print(wrap[key].registerDate);
+        wrap[key].birthday = date.print(wrap[key].birthday);
+        if (wrap[key].userType >= 10 && wrap[key].userType <= 20) {
+            wrap[key].userType = '未登录';
+        } else if (wrap[key].userType > 20) {
+            wrap[key].userType = '已注销';
+        } else {
+            wrap[key].userType = typeChar[wrap[key].userType];
+        }
+        wrap[key].avatar = (app.globalData.cloudpath + 'avatar/' + wrap[key].avatar).trim();
+    }
+
+    handler.setData(wrap);
 }

@@ -5,7 +5,9 @@ App({
     onLaunch: async function () {
         io.out('app开始初始化');
         io.time();
-        this.globalData = {};
+        this.globalData = {
+            cloudpath: 'cloud://cloud1-4gfwdpzcf1fa51e4.636c-cloud1-4gfwdpzcf1fa51e4-1312121494/',
+        };
 
         this.cloudInitParam = {
             env: 'cloud1-4gfwdpzcf1fa51e4',
@@ -30,11 +32,15 @@ App({
             io.timeLog();
 
             this.globalData.userInfo = await user.getUser();
+            user.refresh(this.handler);
             io.timeLog();
             io.log('userInfo:', this.globalData.userInfo);
             if (this.globalData.userInfo.userType < 0) {
                 throw new Error('信息获取失败');
-            } else if (this.globalData.userInfo.userType == 0) {
+            } else if (Math.floor(this.globalData.userInfo.userType / 10) == 1) {
+                io.print('您已退出登录，请先登录');
+                return;
+            } else if (this.globalData.userInfo.userType % 10 == 0) {
                 wx.navigateTo({
                     url: '/pages/userInfo/userInfo?type=register',
                 });
