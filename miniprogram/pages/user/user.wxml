@@ -1,0 +1,2 @@
+<text>这是一个用户首页</text>
+<text wx:if="{{1}}">QwQ</text>

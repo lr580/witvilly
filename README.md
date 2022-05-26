@@ -21,7 +21,7 @@
 | ID       | string | 微信API获取的 `openID`                   |
 | 性别     | string | `男`,`女`,`未知`(或空)                   |
 | 日期     | number | 定义见`变量和函数定义-common-dateCalc`   |
-| 用户类别 | number | 0未知,1村民,2基层干部,3高层干部          |
+| 用户类别 | number | 0未知(未注册),1村民,2基层干部,3高层干部  |
 | 头像路径 | string | 以 `/avatar/` 为相对路径，格式 `xxx.xxx` |
 | 时间戳   | number | 时间毫秒的时间戳                         |
 | 富文本   | string | HTML格式富文本                           |
@@ -47,6 +47,8 @@
 云开发 ID：`cloud1-4gfwdpzcf1fa51e4` 
 
 头像文件夹：`avatar` 
+
+- 默认头像 `default.jpg`
 
 富文本图片文件夹：`rich`
 
@@ -195,23 +197,52 @@ relative
 
 ## 变量和函数定义
 
+### 变量
+
+#### 全局变量
+
+##### app.globalData
+
+- `openid` 运行程序自动获取
+- `handler` 页面 this 传引用，可以用于操作一个页面，默认是用户页 `user`，在其 `onLoad` 时自动获取
+
+
+
+#### 页面变量
+
+即页面的 data 对象内容
+
+##### user
+
+
+
+
+
+### 函数
+
 按照文件层次描述了可供调用的 (public) 函数的基本信息。
 
 在 `js` 目录内，所有通用性高(即放到别的程序也能用的代码)的内容将在子目录 `common` 内；专用性(即只在本程序较为适用)的内容放在其他子目录内。
 
-### common
+#### common
 
-#### md5
+##### obj
+
+Object 功能拓展。[深复制参考](https://blog.csdn.net/weixin_46074961/article/details/122412958)
+
+- `clone(obj)` 返回深复制结果。
+
+##### md5
 
 标准 md5 非对称加密库。[参考](https://www.cnblogs.com/kiko2014551511/p/11610943.html)
 
 - `md5(string)` 将字符串加密，返回长 32 的字符串代表加密结果
 
-#### dateCalc
+##### dateCalc
 
 时间、日期计算专用。
 
-考虑到在数据库存储的处理不便，考虑到本程序的需求，此处规定日期存储统统用 `yyyymmddhhmmss` 格式整数，命名为 `strDate` 或简写为 `str`。若 `hhmmss` 全 `0` ，可简写为 `yyyymmdd`。若任意信息未知，缺省填全 $0$。并提供如下函数：
+考虑到在数据库存储的处理不便，考虑到本程序的需求，此处规定日期存储统统用 `yyyymmddhhmmss` 格式整数，命名为 `strDate` 或简写为 `str`。若 `hhmmss` 全 `0` ，可简写为 `yyyymmdd`。若任意信息未知，缺省填全 0。全 0 代表不存在的日期。并提供如下函数：
 
 > [参考-format方法增加](https://wenku.baidu.com/view/9d645cfc6c1aff00bed5b9f3f90f76c661374ccc.html)
 
@@ -220,7 +251,7 @@ relative
 
 
 
-#### promisify
+##### promisify
 
 异步操作简化库。[参考](http://news.558idc.com/122801.html)
 
@@ -244,11 +275,19 @@ relative
 
 
 
-#### upload
+##### upload
 
 上传文件、图片等专用。
 
 - 
+
+
+
+#### base
+
+##### cadreCtrl
+
+
 
 
 
@@ -261,8 +300,6 @@ relative
 - `getopenid` ，传入任意，返回带`openid`，对回调返回体用`.result.openid`拾取
 
 
-
-### 全局变量
 
 
 
