@@ -49,17 +49,8 @@ function createParamObj(handler, obj) {
     }
 }
 
-export function helpInput(handler, key = '', dest = '', funcName = '', obj = 'input', initObj = 'userInfo') {
-    if (dest.length == 0) {
-        dest = key;
-    }
-    if (funcName.length == 0) {
-        funcName = 'input_' + key;
-    }
+function createParamInObj(handler, obj, dest, initObj) {
     createParamObj(handler, obj);
-    // if (handler.data[obj] == undefined) {
-    //     handler.data[obj] = {};
-    // }
     if (handler.data[obj][dest] == undefined) { //似乎没必要，反正后面setData会帮建的吧(?)
         if (handler.data[initObj] && handler.data[initObj][dest]) {
             handler.data[obj][dest] = handler.data[initObj][dest];
@@ -67,12 +58,104 @@ export function helpInput(handler, key = '', dest = '', funcName = '', obj = 'in
             handler.data[obj][dest] = '';
         }
     }
+}
+
+function checkDestAndFuncName(key, dest, funcName) {
+    // if (dest.length == 0) {
+    //     dest = key;
+    // }
+    // if (funcName.length == 0) {
+    //     funcName = 'input_' + key;
+    // }
+    return {
+        dest: checkDest(key, dest),
+        funcName: checkFuncName(key, funcName),
+    };
+}
+
+function checkDest(key, dest) {
+    return dest.length == 0 ? key : dest;
+}
+
+function checkFuncName(key, funcName) {
+    return funcName.length == 0 ? 'input_' + key : funcName;
+}
+
+export function helpInput(handler, key = '', dest = '', funcName = '', obj = 'input', initObj = 'userInfo') {
+    // if (dest.length == 0) {
+    //     dest = key;
+    // }
+    // if (funcName.length == 0) {
+    //     funcName = 'input_' + key;
+    // }
+    // createParamObj(handler, obj);
+    // if (handler.data[obj][dest] == undefined) { //似乎没必要，反正后面setData会帮建的吧(?)
+    //     if (handler.data[initObj] && handler.data[initObj][dest]) {
+    //         handler.data[obj][dest] = handler.data[initObj][dest];
+    //     } else {
+    //         handler.data[obj][dest] = '';
+    //     }
+    // }
+    // let temp = checkDestAndFuncName(key, dest, funcName);
+    // dest = temp.dest;
+    // funcName = temp.funcName;
+    // dest = checkDest(key, dest);
+    // funcName = checkFuncName(key, funcName);
+    // createParamInObj(handler, obj, dest, initObj);
+    // handler[funcName] = function (param) {
+    //     let wrap = {};
+    //     wrap[obj] = handler.data[obj]; //不要覆盖原有的
+    //     wrap[obj][dest] = param.detail.value;
+    //     handler.setData(wrap);
+    // }
+    wrapInput(handler, null, key, dest, funcName, obj, initObj);
+}
+
+export function splitInput(str) {
+    return str.trim().split(/[ ,\.;，。；、/]+/).filter(function (x) {
+        return x.length;
+    });
+}
+
+export function helpInputs(handler, key = '', dest = '', funcName = '', obj = 'input', initObj = 'userInfo') {
+    // let temp = checkDestAndFuncName(key, dest, funcName);
+    // dest = temp.dest;
+    // funcName = temp.funcName;
+    // dest = checkDest(key, dest);
+    // funcName = checkFuncName(key, funcName);
+    // createParamInObj(handler, obj, dest, initObj);
+    // handler[funcName] = function (param) {
+    //     let wrap = {};
+    //     wrap[obj] = handler.data[obj]; //不要覆盖原有的
+    //     wrap[obj][dest] = splitInput(param.detail.value);
+    //     handler.setData(wrap);
+    // }
+    wrapInput(handler, splitInput, key, dest, funcName, obj, initObj);
+}
+
+export function wrapInput(handler, f = null, key = '', dest = '', funcName = '', obj = 'input', initObj = 'userInfo') {
+    if (!f) {
+        f = function (x) {
+            return x
+        };
+    }
+    dest = checkDest(key, dest);
+    funcName = checkFuncName(key, funcName);
+    createParamInObj(handler, obj, dest, initObj);
     handler[funcName] = function (param) {
         let wrap = {};
         wrap[obj] = handler.data[obj]; //不要覆盖原有的
-        wrap[obj][dest] = param.detail.value;
+        wrap[obj][dest] = f(param.detail.value);
         handler.setData(wrap);
     }
+}
+
+export function helpInputSex(handler, key = '', dest = '', funcName = '', obj = 'input', initObj = 'userInfo') {
+    wrapInput(handler, transformSex, key, dest, funcName, obj, initObj);
+}
+
+export function helpInputDate(handler, key = '', dest = '', funcName = '', obj = 'input', initObj = 'userInfo') {
+    wrapInput(handler, transformPickdate, key, dest, funcName, obj, initObj);
 }
 
 const warnFrequence = true;
@@ -192,7 +275,7 @@ export async function uploadImages(cnt = 9, root = imageRoot, abbr = true) {
     return imagePaths;
 }
 
-export async function uploads(src, dest) {//有空可以用Promise.all重写
+export async function uploads(src, dest) { //有空可以用Promise.all重写
     let suc = 0;
     return await new Promise((res, rej) => {
         for (let i = 0; i < src.length; ++i) {

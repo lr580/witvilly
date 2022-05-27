@@ -1,4 +1,5 @@
 <view>通讯录</view>
+<button bindtap="goto_addDirectory">新建村民</button>
 <view wx:if="{{people.length}}">
     <view wx:for="{{people}}" wx:key="_id">
         <text>{{index}} - {{item._id}} - {{item.name}} - {{item.sex}} - {{item.firstSpell}}</text>

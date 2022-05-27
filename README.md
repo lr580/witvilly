@@ -323,6 +323,10 @@ Object 功能拓展。[深复制参考](https://blog.csdn.net/weixin_46074961/ar
 
   生成一个 input 的 `bindinput` ，函数名为 `funcName` 默认为 `input_`+key，存储值为 `handler.data.obj.dest`，其 `dest` 默认为 key。每次输入时将输入值放到该变量里，调用 `handler.setData`。其中 `handler` 是页面 page 的传引用 this。若 `handler` 没有这个 `dest` 或 `obj` 自动新定义一个。
 
+- `helpInputs` 参数同上，按空白字符和标点符号分割输入为数组存储；去除首尾空白
+
+- `helpInputSex` , `helpInputDate` 参数同上，自动转换格式为存储格式
+
 - `initLock(handler, lockname = '1')` 
 
   为 page 添加一个防频繁点击锁，锁ID为 `lockname`。之后使用 `checklock_lockname` 来加锁，若之前已经锁了那么就返回 true(可以直接 return)，用 `unlock_lockname` 来解锁。可以在 `handler.data.locks.lockname` 看到这个布尔值变量锁。
@@ -389,6 +393,7 @@ Object 功能拓展。[深复制参考](https://blog.csdn.net/weixin_46074961/ar
 
 - `getPeople(openid = '', governs = null)` 获取 `openid` 用户管理的或 `governs` 的所有群众的信息。若 `openid` 为空取当前用户。若 `governs` 为空从数据库读 `openid` 的 `governs`
 - `sort(arr, type = 1, asc = true)` 对群众信息排序，依据为 `type`，其 1 代表按名字拼音排序。
+- `blender(arr)` 为群众信息添加显示用的附加信息，有 `firstSpell` 姓首字母，有 `age` 年龄(未做)。
 
 
 

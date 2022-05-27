@@ -1,0 +1,42 @@
+<view wx:if="{{type}}">编辑</view>
+<view wx:else>新建</view>
+<view>
+    <view>
+        <text>姓名：</text>
+        <input type="text" maxlength="30" placeholder="请输入真实姓名" bindinput="input_name" value="{{peopleInfo.name}}" />
+    </view>
+    <view>
+        <text>性别：</text>
+        <radio-group bindchange="input_sex">
+            <radio value="男" checked="{{peopleInfo.sex=='男'}}">男</radio>
+            <radio value="女" checked="{{peopleInfo.sex=='女'}}">女</radio>
+        </radio-group>
+    </view>
+    <view>
+        <text>出生日期：</text>
+        <picker mode="date" bindchange="input_birthday" value="{{peopleInfo.birthday}}">
+            当前： {{input.birthday?input.birthday:peopleInfo.birthday}}
+        </picker>
+    </view>
+    <view>
+        <text>收入描述：</text>
+        <input type="text" maxlength="80" placeholder="请输入收入情况(可缺省)" bindinput="input_income" value="{{peopleInfo.income}}" />
+    </view>
+    <view>
+        <text>职业：</text>
+        <input type="text" maxlength="150" placeholder="请输入职业(多个用空格，逗号等隔开)" bindinput="input_jobs" value="{{peopleInfo.jobs}}"/>
+    </view>
+    <view>
+        <text>地址：</text>
+        <input type="text" maxlength="150" placeholder="请输入地址(多个用空格，逗号等隔开)" bindinput="input_addresses" value="{{peopleInfo.addresses}}"/>
+    </view>
+    <view>
+        <text>联系方式：</text>
+        <input type="text" maxlength="150" placeholder="请输入联系方式(多个用空格，逗号等隔开)" bindinput="input_contacts" value="{{peopleInfo.contacts}}"/>
+    </view>
+    <view>
+        <text>微信号：</text>
+        <input type="text" maxlength="80" placeholder="请输入微信号(可缺省)" bindinput="input_wechat" value="{{peopleInfo.wechat}}" />
+    </view>
+</view>
+<button bindtap="save">保存</button>

@@ -97,6 +97,10 @@ export function blender(arr) { //添加显示用的附加属性
     return arr;
 }
 
+export async function addPeople(obj, openid) {
+
+}
+
 export function testBunch(openid = '', n = 100) { //创建n个测试群众
     get_col();
     let f = function (id) {

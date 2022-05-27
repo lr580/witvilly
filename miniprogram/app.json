@@ -4,7 +4,8 @@
         "pages/index/index",
         "pages/userInfo/userInfo",
         "pages/help/help",
-        "pages/directory/directory"
+        "pages/directory/directory",
+        "pages/editDirectory/editDirectory"
     ],
     "window": {
         "backgroundColor": "#F6F6F6",

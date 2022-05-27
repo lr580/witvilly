@@ -1,13 +1,15 @@
 import * as peo from '../../js/base/peopleCtrl';
+import * as io from '../../js/common/io';
 Page({
     data: {},
 
-    async onLoad(options) {
+    async onLoad(options) {//maybe onShow? or maybe not
         let people = await peo.getPeople('', getApp().globalData.userInfo.governs);
         peo.blender(peo.sort(people));
         this.setData({
             people: people,
         });
+        io.helpGoto(this, 'editDirectory', {}, 'goto_addDirectory');
     },
 
     /**
