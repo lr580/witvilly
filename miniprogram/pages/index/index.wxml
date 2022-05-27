@@ -1,0 +1,2 @@
+<h1>这是一个主页</h1>
+<view>调试内容{{testInfo}}</view>

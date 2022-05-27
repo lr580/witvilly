@@ -1,0 +1,61 @@
+<view wx:if="{{type=='register'}}">
+    <view>
+
+   </view>
+    <view>
+        <text>用户类型：</text>
+        <radio-group bindchange="select_userType">
+            <radio value="2" checked="true">基层干部</radio>
+        </radio-group>
+    </view>
+    <view>请填写您的基本信息：</view>
+    <view>
+        <text>姓名：</text>
+        <input type="text" maxlength="30" placeholder="请输入真实姓名" bindinput="input_name" value="{{userInfo.name}}" />
+    </view>
+    <view>
+        <text>工作地址：</text>
+        <input type="text" maxlength="60" placeholder="请输入详细工作地址" bindinput="input_address" value="{{userInfo.address}}" />
+    </view>
+    <view>您可以在注册后在用户页面继续完善您的信息。</view>
+    <button bindtap="save">提交</button>
+</view>
+<view wx:else>
+    <view wx:if="{{!userInfo}}">加载失败</view>
+    <view wx:else>
+        <image src="{{userInfo.avatar}}"></image>
+        <button bindtap="upload_avatar">点我更换头像</button>
+
+        <view>
+            <text>姓名：</text>
+            <input type="text" maxlength="30" placeholder="请输入真实姓名" bindinput="input_name" value="{{userInfo.name}}" />
+        </view>
+        <view>
+            <text>职务：</text>
+            <input type="text" maxlength="30" placeholder="请输入职务" bindinput="input_job" value="{{userInfo.job}}" />
+        </view>
+        <view>
+            <text>工作地址：</text>
+            <input type="text" maxlength="60" placeholder="请输入详细工作地址" bindinput="input_address" value="{{userInfo.address}}" />
+        </view>
+        <view>
+            <text>性别：</text>
+            <radio-group bindchange="input_sex">
+                <radio value="男" checked="{{userInfo.sex=='男'}}">男</radio>
+                <radio value="女" checked="{{userInfo.sex=='女'}}">女</radio>
+            </radio-group>
+        </view>
+        <view>
+            <text>出生日期：</text>
+            <picker mode="date" bindchange="input_birthday" value="{{userInfo.birthday}}">
+               当前： {{input.birthday?input.birthday:userInfo.birthday}}
+            </picker>
+        </view>
+        <view>
+            <text>简介：</text>
+            <input type="text" maxlength="200" placeholder="请输入个人简介" bindinput="input_profile" value="{{userInfo.profile}}" />
+        </view>
+
+        <button bindtap="save">保存</button>
+    </view>
+</view>

@@ -1,0 +1,16 @@
+{
+    "pages": [
+        "pages/user/user",
+        "pages/index/index",
+        "pages/userInfo/userInfo",
+        "pages/help/help"
+    ],
+    "window": {
+        "backgroundColor": "#F6F6F6",
+        "backgroundTextStyle": "light",
+        "navigationBarBackgroundColor": "#F6F6F6",
+        "navigationBarTitleText": "(名字暂定)智慧村",
+        "navigationBarTextStyle": "black"
+    },
+    "style": "v2"
+}
