@@ -81,9 +81,9 @@ export function print(v, type = 0) {
     }
     v = new Date(v);
     if (type == 0) {
-        return v.format('yyyy/MM/dd');
+        return v.format('yyyy-MM-dd');
     } else if (type == 1) {
-        return v.format('yyyy/MM/dd hh:mm:ss');
+        return v.format('yyyy-MM-dd hh:mm:ss');
     } else {
         return '';
     }

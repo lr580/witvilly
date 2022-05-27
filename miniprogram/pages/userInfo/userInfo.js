@@ -7,7 +7,6 @@ Page({
      */
     data: {
         type: '',
-        userInfo: '',
     },
 
     /**
@@ -19,8 +18,13 @@ Page({
                 type: options.type,
             });
         }
+        user.refresh(this);
         io.helpInput(this, 'name');
         io.helpInput(this, 'address');
+        io.helpInput(this, 'sex');
+        io.helpInput(this, 'birthday');
+        io.helpInput(this, 'job');
+        io.helpInput(this, 'profile');
         let thee = this; //下面不thee不行
         io.lockfunc(this, 'save', async function () {
             thee.data.input.userType = 2; //当前版本默认用户为2
@@ -28,20 +32,25 @@ Page({
                 io.print('请填写您的姓名');
                 return;
             }
+            // if (thee.data.input.sex.length == 0) {
+            //     thee.data.input.sex = '未知';
+            // }
+            thee.data.input.sex = io.transformSex(thee.data.input.sex);
+            // if (String(thee.data.input.birthday) == 'NaN' || thee.data.input.birthday.length == 0) { //isNaN不好用
+            //     thee.data.input.birthday = 0;
+            // } else {
+            //     thee.data.input.birthday = (new Date(thee.data.input.birthday)).getTime();
+            // }
+            thee.data.input.birthday = io.transformPickdate(thee.data.input.birthday);
             await user.update(thee.data.input);
             wx.navigateBack();
         }, true);
-        if (thee.data.type != 'register') {
-            io.out('未开发');
-        }
         io.lockfunc(this, 'upload_avatar', async function () {
             let path = await io.uploadImages(1, 'avatar/');
-            if (path.length) { 
-                // path = path[0].substr(path[0].indexOf('/') + 1);
+            if (path.length) {
                 await user.update({
                     avatar: path[0],
-                });
-                user.refresh(thee);
+                }, thee);
             }
         });
     },
@@ -62,6 +71,7 @@ Page({
      */
     onShow() {
         user.refresh(this);
+        // user.refresh(this, 'userInfo_raw', false);
     },
 
     /**

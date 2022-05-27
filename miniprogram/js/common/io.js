@@ -43,18 +43,29 @@ export function timeLog() {
     }
 }
 
-export function helpInput(handler, key = '', dest = '', funcName = '', obj = 'input') {
+function createParamObj(handler, obj) {
+    if (handler.data[obj] == undefined) {
+        handler.data[obj] = {};
+    }
+}
+
+export function helpInput(handler, key = '', dest = '', funcName = '', obj = 'input', initObj = 'userInfo') {
     if (dest.length == 0) {
         dest = key;
     }
     if (funcName.length == 0) {
         funcName = 'input_' + key;
     }
-    if (handler.data[obj] == undefined) {
-        handler.data[obj] = {};
-    }
+    createParamObj(handler, obj);
+    // if (handler.data[obj] == undefined) {
+    //     handler.data[obj] = {};
+    // }
     if (handler.data[obj][dest] == undefined) { //似乎没必要，反正后面setData会帮建的吧(?)
-        handler.data[obj][dest] = '';
+        if (handler.data[initObj] && handler.data[initObj][dest]) {
+            handler.data[obj][dest] = handler.data[initObj][dest];
+        } else {
+            handler.data[obj][dest] = '';
+        }
     }
     handler[funcName] = function (param) {
         let wrap = {};
@@ -64,22 +75,15 @@ export function helpInput(handler, key = '', dest = '', funcName = '', obj = 'in
     }
 }
 
-export function helpInput0(handler, key = '', dest = '', funcName = '') { //旧版函数，暂时废置
-    if (dest.length == 0) {
-        dest = 'i_' + key;
-    }
-    if (funcName.length == 0) {
-        funcName = 'input_' + key;
-    }
-    if (handler.data[dest] == undefined) { //似乎没必要，反正后面setData会帮建的吧(?)
-        handler.data[dest] = '';
-    }
-    handler[funcName] = function (param) {
-        let wrap = {};
-        wrap[dest] = param.detail.value;
-        handler.setData(wrap);
-    }
-}
+// export function helpSelect(handler, key = '', dest = '', funcName = '', obj = 'input') {
+//     if (dest.length == 0) {
+//         dest = key;
+//     }
+//     if (funcName.length == 0) {
+//         funcName = 'select_' + key;
+//     }
+//     createParamObj(handler, obj);
+// } 不需要
 
 const warnFrequence = true;
 export function lockfunc(handler, lockname, func, async = true) {
@@ -142,7 +146,6 @@ export function helpGoto(handler, url, param = {}, funcName = '', full = false) 
         para += key + '=' + param[key];
     }
     url += para;
-    out(url);
     handler[funcName] = function () {
         wx.navigateTo({
             url: url,
@@ -178,15 +181,15 @@ export async function uploadImages(cnt = 9, root = imageRoot, abbr = true) {
             count: cnt,
         });
         let beginTime = (new Date()).getTime();
-        for (let i in tempRes.tempFilePaths) { 
+        for (let i in tempRes.tempFilePaths) {
             let tempFilePath = tempRes.tempFilePaths[i];
             let pathSplit = tempFilePath.split('.');
             let suffix = pathSplit[pathSplit.length - 1];
             let destPath0 = String(beginTime + i) + '.' + suffix;
+            destPaths.push(root + destPath0);
             if (!abbr) {
                 destPath0 = root + destPath0;
-            } 
-            destPaths.push(root + destPath0);
+            }
             imagePaths.push(destPath0);
         }
         await uploads(tempRes.tempFilePaths, destPaths);
@@ -216,4 +219,20 @@ export async function uploads(src, dest) {
             });
         }
     });
+}
+
+export function transformPickdate(val) { //将'yyyy-mm-dd'转时间戳
+    if (String(val) == 'NaN' || val.length == 0) { //isNaN不好用
+        val = 0;
+    } else {
+        val = (new Date(val)).getTime();
+    }
+    return val;
+}
+
+export function transformSex(val) {
+    if (val.length == 0) {
+        val = '未知';
+    }
+    return val;
 }

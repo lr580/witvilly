@@ -51,6 +51,7 @@ var template = {
     profile: '',
     phone: '',
     address: '',
+    job: '',
     governs: [],
     memos: [],
     plans: [],
@@ -66,7 +67,7 @@ function getTemplate(openid = '', userType = 0) {
     return tmp;
 }
 
-export async function update(infos) {
+export async function update(infos, handler = null, key = 'userInfo', decor = true) {
     get_col();
     try {
         await col.where({
@@ -76,6 +77,9 @@ export async function update(infos) {
         });
         for (let key in infos) {
             app.globalData.userInfo[key] = infos[key];
+        }
+        if (handler) {
+            refresh(handler, key, decor);
         }
     } catch (err) {
         io.err(err, '更新失败，请重试');

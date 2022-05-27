@@ -5,9 +5,11 @@
     <image src="{{userInfo.avatar}}"></image>
     <view>姓名：{{userInfo.name}}</view>
     <view>性别：{{userInfo.sex}}</view>
-    <view>出生日期：{{userInfo.sex}}</view>
+    <view>出生日期：{{userInfo.birthday}}</view>
     <view>注册日期：{{userInfo.registerDate}}</view>
-    <view>职位：{{userInfo.userType}}</view>
+    <view>职位：{{userInfo.job}}</view>
+    <view>简介：{{userInfo.profile}}</view>
+    <view>用户类别：{{userInfo.userType}}</view>
     <button bindtap="unlogin">点我退出登录</button>
     <button bindtap="goto_userInfo">点我编辑用户信息</button>
 </view>

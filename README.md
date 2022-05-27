@@ -81,6 +81,7 @@ cadre。主要是基层干部
 - `prifile` string 个人介绍
 - `phone` string 手机号
 - `address` string 工作地址
+- `job` string 职务 
 - `governs` array(<u>时间戳</u>) 管理的群众
 - `memos` array(<u>时间戳</u>) 拥有的备忘录+政务通知
 - `plans` array(<u>时间戳</u>) 拥有的计划
@@ -310,13 +311,9 @@ Object 功能拓展。[深复制参考](https://blog.csdn.net/weixin_46074961/ar
 
 - 同理，有 `time` , `timeEnd` , `timeOut` 函数，代替 `console` 的对应函数。
 
-- `helpInput0(handler, key = '', dest = '', funcName = '', obj = 'input')` 
+- `helpInput(handler, key = '', dest = '', funcName = '', obj = 'input')` 
 
   生成一个 input 的 `bindinput` ，函数名为 `funcName` 默认为 `input_`+key，存储值为 `handler.data.obj.dest`，其 `dest` 默认为 key。每次输入时将输入值放到该变量里，调用 `handler.setData`。其中 `handler` 是页面 page 的传引用 this。若 `handler` 没有这个 `dest` 或 `obj` 自动新定义一个。
-
-- `helpInput0(handler, key = '', dest = '', funcName = '')` 
-
-  生成一个 input 的 `bindinput` ，函数名为 `funcName` 默认为 `input_`+key，存储值为 `handler.data.dest`，其 `dest` 默认为 `i_`+key。每次输入时将输入值放到该变量里，调用 `handler.setData`。其中 `handler` 是页面 page 的传引用 this。若 `handler` 没有这个 `dest` 自动新定义一个。
 
 - `initLock(handler, lockname = '1')` 
 
@@ -338,6 +335,10 @@ Object 功能拓展。[深复制参考](https://blog.csdn.net/weixin_46074961/ar
 
 - `uploads(src, dest)` 将临时文件URL数组`src`的文件上传到云路径数组`dest`。
 
+- `transformSex(val)` 将输入格式的性别转化为后台存储格式
+
+- `transformPicktime(val)` 将输入格式的日期转化为后台存储格式
+
 
 
 ##### upload
@@ -356,7 +357,7 @@ Object 功能拓展。[深复制参考](https://blog.csdn.net/weixin_46074961/ar
 
 - `getUser()` 获取当前用户 `cadre` 信息，若不存在则创建，返回信息。
 
-- `update(infos)` 将更新当前用户的信息同时作用于云存储和本地。
+- `update(infos, handler = null, key = 'userInfo', decor = true)` 将更新当前用户的信息同时作用于云存储和本地。若 `handler` 非 null，则自动执行 `refresh`。
 
 - `refresh(handler, key = 'userInfo', decor = true)` 
 
