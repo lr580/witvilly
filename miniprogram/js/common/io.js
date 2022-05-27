@@ -60,19 +60,6 @@ function createParamInObj(handler, obj, dest, initObj) {
     }
 }
 
-function checkDestAndFuncName(key, dest, funcName) {
-    // if (dest.length == 0) {
-    //     dest = key;
-    // }
-    // if (funcName.length == 0) {
-    //     funcName = 'input_' + key;
-    // }
-    return {
-        dest: checkDest(key, dest),
-        funcName: checkFuncName(key, funcName),
-    };
-}
-
 function checkDest(key, dest) {
     return dest.length == 0 ? key : dest;
 }
@@ -82,32 +69,6 @@ function checkFuncName(key, funcName) {
 }
 
 export function helpInput(handler, key = '', dest = '', funcName = '', obj = 'input', initObj = 'userInfo') {
-    // if (dest.length == 0) {
-    //     dest = key;
-    // }
-    // if (funcName.length == 0) {
-    //     funcName = 'input_' + key;
-    // }
-    // createParamObj(handler, obj);
-    // if (handler.data[obj][dest] == undefined) { //似乎没必要，反正后面setData会帮建的吧(?)
-    //     if (handler.data[initObj] && handler.data[initObj][dest]) {
-    //         handler.data[obj][dest] = handler.data[initObj][dest];
-    //     } else {
-    //         handler.data[obj][dest] = '';
-    //     }
-    // }
-    // let temp = checkDestAndFuncName(key, dest, funcName);
-    // dest = temp.dest;
-    // funcName = temp.funcName;
-    // dest = checkDest(key, dest);
-    // funcName = checkFuncName(key, funcName);
-    // createParamInObj(handler, obj, dest, initObj);
-    // handler[funcName] = function (param) {
-    //     let wrap = {};
-    //     wrap[obj] = handler.data[obj]; //不要覆盖原有的
-    //     wrap[obj][dest] = param.detail.value;
-    //     handler.setData(wrap);
-    // }
     wrapInput(handler, null, key, dest, funcName, obj, initObj);
 }
 
@@ -118,18 +79,6 @@ export function splitInput(str) {
 }
 
 export function helpInputs(handler, key = '', dest = '', funcName = '', obj = 'input', initObj = 'userInfo') {
-    // let temp = checkDestAndFuncName(key, dest, funcName);
-    // dest = temp.dest;
-    // funcName = temp.funcName;
-    // dest = checkDest(key, dest);
-    // funcName = checkFuncName(key, funcName);
-    // createParamInObj(handler, obj, dest, initObj);
-    // handler[funcName] = function (param) {
-    //     let wrap = {};
-    //     wrap[obj] = handler.data[obj]; //不要覆盖原有的
-    //     wrap[obj][dest] = splitInput(param.detail.value);
-    //     handler.setData(wrap);
-    // }
     wrapInput(handler, splitInput, key, dest, funcName, obj, initObj);
 }
 

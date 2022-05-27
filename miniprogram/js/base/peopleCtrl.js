@@ -123,7 +123,6 @@ export function testBunch(openid = '', n = 100) { //创建n个测试群众
     }
     for (let i = 0; i < n; ++i) {
         let newpeople = getTemplate(i);
-        // let _id = newpeople._id;
         let newsex = ran.randint(1, 2);
         newpeople.name = ran.name(newsex);
         newpeople.sex = ['', '男', '女'][newsex];

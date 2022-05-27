@@ -1,29 +1,9 @@
 import * as io from '../../js/common/io';
-// import * as spell from '../../js/common/spells';
 Page({
     data: {},
 
     onLoad: async function (options) {
         io.helpGoto(this, 'directory');
-        // const prom1 = new Promise((res) => {
-        //     setTimeout(res, 400, '等待400ms完成的异步返回的数据');
-        // });
-        // const prom2 = new Promise((res) => {
-        //     setTimeout(res, 500, '等待500ms完成的异步返回的数据');
-        // });
-        // const prom3 = new Promise((res) => {
-        //     setTimeout(res, 300, '等待300ms完成的异步返回的数据');
-        // });
-        // let res = await Promise.all([prom1, prom2, prom3]);
-        // console.log(res);
-        // var array = ['锦乐', '果冻', '白茶', '白芙', '白金'];
-        // var resultArray = array.sort(
-        //     (param1, param2) => {
-        //         return param1.localeCompare(param2, "zh");
-        //     }
-        // );
-        // console.log(resultArray);
-        // io.out(spell.convert('你好123A BcC D0- SDF,.，。！EW>\n<再见h\thh'));
     },
 
     /**
