@@ -18,4 +18,10 @@
     <view>您可以在注册后在用户页面继续完善您的信息。</view>
     <button bindtap="save">提交</button>
 </view>
-<view wx:else>QwQ</view>
+<view wx:else>
+    <view wx:if="{{!userInfo}}">加载失败</view>
+    <view wx:else>
+       <image src="{{userInfo.avatar}}"></image>
+       <button bindtap="upload_avatar">点我更换头像</button>
+    </view>
+</view>

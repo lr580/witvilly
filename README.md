@@ -325,6 +325,18 @@ Object 功能拓展。[深复制参考](https://blog.csdn.net/weixin_46074961/ar
 - `lockfunc(handler, lockname, func, async = false) ` 
 
   在上文的基础上，绑定一个锁函数 `func` ，函数名为 `lockname` ，执行该函数体。目前暂时只有无参函数，如果想要有参用 `initLock`。
+  
+- `helpGoto(handler, url, param = {}, funcName = '', full = false)` 
+
+  为 page 绑定一个 `funcName` 函数，调用跳转到名为 `url` 的页面，参数列表为 `param`。若 `funcName` 缺省，`funcName='goto_'+url`，若非 `full`，令 `url` 为 `/pages/url/url`。
+
+- `setData(handler, ...param)` 调用 page 的 `setData`，以 `param` 奇数为 key，偶数为 value。
+
+  `setDatas(handler, param)` 简写式(格式同原有)。
+
+- `uploadImages(cnt = 9, root = 'rich/')` 上传最多 `cnt` 张图片到云存储路径 `root` 目录下，返回完整目录数组或不完整目录数组(`abbr=true`)
+
+- `uploads(src, dest)` 将临时文件URL数组`src`的文件上传到云路径数组`dest`。
 
 
 

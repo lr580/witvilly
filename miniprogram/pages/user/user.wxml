@@ -8,11 +8,15 @@
     <view>出生日期：{{userInfo.sex}}</view>
     <view>注册日期：{{userInfo.registerDate}}</view>
     <view>职位：{{userInfo.userType}}</view>
-
     <button bindtap="unlogin">点我退出登录</button>
+    <button bindtap="goto_userInfo">点我编辑用户信息</button>
 </view>
 <view wx:elif="{{userInfo && userInfo.userType == '未登录'}}">
     <view>请先登录</view>
     <button bindtap="login">点我登录</button>
 </view>
 <view wx:else>加载中……</view>
+<view>
+    <button open-type="feedback">意见反馈</button>
+    <button bindtap="goto_help">帮助</button>
+</view>

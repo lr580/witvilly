@@ -1,10 +1,21 @@
-// import {
-//     md5
-// } from '/md5.js';
-
 const destRoot = "rich/";
+// import * as io from '../common/io';
+// import '../common/io';
 
-async function uploadImages(cnt = 9) {
+// export async function uploadImages(cnt = 9, root = destRoot) {
+//     try {
+//         let tempRes = await wx.chooseImage({
+//             count: cnt,
+//         });
+//         io.out(tempRes);
+//     } catch (err) {
+//         if (res0.errMsg != "chooseImage:fail cancel") {
+//             io.err(err, '上传失败');
+//         }
+//     }
+// }
+
+async function uploadImages0(cnt = 9) { //已废置
     let imagePaths = [];
     await new Promise(resolve => {
         wx.chooseImage({
@@ -21,7 +32,7 @@ async function uploadImages(cnt = 9) {
                     imagePaths.push(destPath);
                     // console.log((new Date()).getTime());
                     // console.log(destPath);
-                    wx.cloud.uploadFile({ 
+                    wx.cloud.uploadFile({
                         filePath: tempFilePath,
                         cloudPath: destPath,
                         // url: destRoot,
@@ -48,7 +59,3 @@ async function uploadImages(cnt = 9) {
     });
     return imagePaths;
 }
-
-export {
-    uploadImages
-};

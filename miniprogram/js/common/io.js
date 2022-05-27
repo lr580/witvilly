@@ -82,7 +82,7 @@ export function helpInput0(handler, key = '', dest = '', funcName = '') { //旧�
 }
 
 const warnFrequence = true;
-export function lockfunc(handler, lockname, func, async = false) {
+export function lockfunc(handler, lockname, func, async = true) {
     initlock(handler, lockname);
     if (!async) {
         handler[lockname] = function () {
@@ -123,4 +123,97 @@ export function initlock(handler, lockname = '1') {
     handler[unlock_name] = function () {
         handler.data.locks[lockname] = false;
     }
+}
+
+export function helpGoto(handler, url, param = {}, funcName = '', full = false) {
+    if (funcName.length == 0) {
+        funcName = 'goto_' + url;
+    }
+    if (!full) {
+        url = '/pages/' + url + '/' + url;
+    }
+    let hasParam = false;
+    let para = '';
+    for (let key in param) {
+        if (!hasParam) {
+            hasParam = true;
+            url += '?';
+        }
+        para += key + '=' + param[key];
+    }
+    url += para;
+    out(url);
+    handler[funcName] = function () {
+        wx.navigateTo({
+            url: url,
+        });
+    };
+}
+
+export function setData(handler, ...param) {
+    let wrap = {};
+    let idx = 0;
+    let key = '';
+    for (let v in param) {
+        if (idx & 1) {
+            wrap[key] = v;
+        } else {
+            key = v;
+        }
+        idx ^= 1;
+    }
+    handler.setData(wrap);
+}
+
+export function setDatas(handler, param) {
+    handler.setData(param);
+}
+
+export const imageRoot = 'rich/';
+export async function uploadImages(cnt = 9, root = imageRoot, abbr = true) {
+    var imagePaths = [];
+    var destPaths = [];
+    try {
+        let tempRes = await wx.chooseImage({
+            count: cnt,
+        });
+        let beginTime = (new Date()).getTime();
+        for (let i in tempRes.tempFilePaths) { 
+            let tempFilePath = tempRes.tempFilePaths[i];
+            let pathSplit = tempFilePath.split('.');
+            let suffix = pathSplit[pathSplit.length - 1];
+            let destPath0 = String(beginTime + i) + '.' + suffix;
+            if (!abbr) {
+                destPath0 = root + destPath0;
+            } 
+            destPaths.push(root + destPath0);
+            imagePaths.push(destPath0);
+        }
+        await uploads(tempRes.tempFilePaths, destPaths);
+    } catch (err) {
+        if (err.errMsg != "chooseImage:fail cancel") {
+            err(err, '上传失败');
+        }
+        return null;
+    }
+    return imagePaths;
+}
+
+export async function uploads(src, dest) {
+    let suc = 0;
+    return await new Promise((res, rej) => {
+        for (let i = 0; i < src.length; ++i) {
+            wx.cloud.uploadFile({
+                filePath: src[i],
+                cloudPath: dest[i],
+            }).then(res1 => {
+                if (++suc == src.length) {
+                    res(true);
+                }
+            }).catch(err1 => {
+                err(err1);
+                rej(false);
+            });
+        }
+    });
 }

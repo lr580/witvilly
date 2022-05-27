@@ -14,10 +14,11 @@ Page({
      * 生命周期函数--监听页面加载
      */
     onLoad(options) {
-        this.setData({
-            type: options.type,
-            userInfo: getApp().globalData.userInfo,
-        });
+        if (options.type != null) {
+            this.setData({
+                type: options.type,
+            });
+        }
         io.helpInput(this, 'name');
         io.helpInput(this, 'address');
         let thee = this; //下面不thee不行
@@ -33,6 +34,16 @@ Page({
         if (thee.data.type != 'register') {
             io.out('未开发');
         }
+        io.lockfunc(this, 'upload_avatar', async function () {
+            let path = await io.uploadImages(1, 'avatar/');
+            if (path.length) { 
+                // path = path[0].substr(path[0].indexOf('/') + 1);
+                await user.update({
+                    avatar: path[0],
+                });
+                user.refresh(thee);
+            }
+        });
     },
 
     select_userType(param) { //暂时无用
@@ -50,7 +61,7 @@ Page({
      * 生命周期函数--监听页面显示
      */
     onShow() {
-
+        user.refresh(this);
     },
 
     /**
