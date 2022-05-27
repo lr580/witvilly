@@ -11,7 +11,7 @@ export var clone = function (obj) {
     return newObj;
 };
 
-export function split(arr, epoch=20) {
+export function split(arr, epoch = 20) { //暂时没啥用了
     let n = Math.ceil(arr.length / epoch);
     let res = [];
     for (let i = 0; i < n; ++i) {
@@ -22,7 +22,3 @@ export function split(arr, epoch=20) {
     }
     return res;
 }
-
-// export async function parallel(){
-
-// }

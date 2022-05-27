@@ -1,27 +1,10 @@
-import * as ran from '../../js/common/randoms';
 import * as peo from '../../js/base/peopleCtrl';
 Page({
+    data: {},
 
-    /**
-     * 页面的初始数据
-     */
-    data: {
-
-    },
-
-    /**
-     * 生命周期函数--监听页面加载
-     */
     async onLoad(options) {
-        // people.testBunch(getApp().globalData.openid, 101);
-        // let t = [];
-        // for (let i = 0; i < 10; ++i) {
-        //     t.push(ran.name());
-        // }
-        // this.setData({
-        //     ts: t
-        // });
-        let people = await peo.getPeople(getApp().globalData.openid, getApp().globalData.userInfo.governs);
+        let people = await peo.getPeople('', getApp().globalData.userInfo.governs);
+        peo.blender(peo.sort(people));
         this.setData({
             people: people,
         });

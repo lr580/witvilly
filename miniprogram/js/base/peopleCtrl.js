@@ -2,6 +2,7 @@ import * as io from '../common/io';
 import * as obj from '../common/obj';
 import * as ran from '../common/randoms';
 import * as user from '../base/userCtrl';
+import * as spell from '../common/spells';
 export var col = null;
 var _ = null;
 var app = null;
@@ -40,7 +41,7 @@ function getTemplate(dt = 0) {
 
 export async function getPeople(openid = '', governs = null) { //可能会查他人的，所以传参
     get_col();
-    if (openid.length == 0) {
+    if (!openid || openid.length == 0) {
         openid = app.globalData.openid;
     }
     let res = []; //空是未创建过,null是读取失败
@@ -56,19 +57,6 @@ export async function getPeople(openid = '', governs = null) { //可能会查他
                 io.err('用户不存在', '用户不存在');
             }
         }
-        // let batch = await col.where({
-        //     _id: _.gt(0)
-        // }).get(); 
-        // ids = obj.split(ids);
-        // await new Promise((reso, reje) => {
-        //     let suc = 0;
-        //     let read = [];
-        //     for(let i in ids){
-        //         col.where({
-        //             _id:_.in(ids)
-        //         })
-        //     }
-        // });
         let batchTimes = Math.ceil(ids.length / epoch);
         let tasks = [];
         for (let i = 0; i < batchTimes; ++i) {
@@ -88,6 +76,25 @@ export async function getPeople(openid = '', governs = null) { //可能会查他
         io.err(err);
     }
     return res;
+}
+
+export function sort(arr, type = 1, asc = true) {
+    if (type == 1) {
+        arr.sort((l, r) => {
+            return l.name.localeCompare(r.name, "zh");
+        });
+    }
+    if (!asc) {
+        arr.reverse();
+    }
+    return arr;
+}
+
+export function blender(arr) { //添加显示用的附加属性
+    for (let i in arr) {
+        arr[i].firstSpell = spell.convert(arr[i].name[0])[0];
+    }
+    return arr;
 }
 
 export function testBunch(openid = '', n = 100) { //创建n个测试群众

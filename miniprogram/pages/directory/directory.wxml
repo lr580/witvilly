@@ -1,10 +1,7 @@
-<!-- <view>测试：随机名字</view>
-<view wx:for="{{ts}}" wx:key="index">{{item}}</view> -->
 <view>通讯录</view>
 <view wx:if="{{people.length}}">
-    <view wx:for="{{people}}" wx:key="i">
-        <!--key donot work but kill the warning-->
-        <text>{{index}} - {{item._id}} - {{item.name}} - {{item.sex}}</text>
+    <view wx:for="{{people}}" wx:key="_id">
+        <text>{{index}} - {{item._id}} - {{item.name}} - {{item.sex}} - {{item.firstSpell}}</text>
     </view>
 </view>
 <view wx:else>您未添加任何通讯录条目</view>

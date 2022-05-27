@@ -359,6 +359,14 @@ Object 功能拓展。[深复制参考](https://blog.csdn.net/weixin_46074961/ar
 
 
 
+##### spells
+
+汉字转拼音。 [参考](https://blog.csdn.net/qq_32442973/article/details/117376530)
+
+- `convert(l1, upper = false)` ，将 `l1` 内汉字全转化为拼音，标点符号空格清理，其他不变， `upper` 是否首字母大写。
+
+
+
 #### base
 
 ##### userCtrl
@@ -379,7 +387,8 @@ Object 功能拓展。[深复制参考](https://blog.csdn.net/weixin_46074961/ar
 
 通讯录群众信息控制。
 
-
+- `getPeople(openid = '', governs = null)` 获取 `openid` 用户管理的或 `governs` 的所有群众的信息。若 `openid` 为空取当前用户。若 `governs` 为空从数据库读 `openid` 的 `governs`
+- `sort(arr, type = 1, asc = true)` 对群众信息排序，依据为 `type`，其 1 代表按名字拼音排序。
 
 
 
