@@ -75,16 +75,6 @@ export function helpInput(handler, key = '', dest = '', funcName = '', obj = 'in
     }
 }
 
-// export function helpSelect(handler, key = '', dest = '', funcName = '', obj = 'input') {
-//     if (dest.length == 0) {
-//         dest = key;
-//     }
-//     if (funcName.length == 0) {
-//         funcName = 'select_' + key;
-//     }
-//     createParamObj(handler, obj);
-// } 不需要
-
 const warnFrequence = true;
 export function lockfunc(handler, lockname, func, async = true) {
     initlock(handler, lockname);

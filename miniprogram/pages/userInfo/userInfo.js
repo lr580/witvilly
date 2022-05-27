@@ -32,15 +32,7 @@ Page({
                 io.print('请填写您的姓名');
                 return;
             }
-            // if (thee.data.input.sex.length == 0) {
-            //     thee.data.input.sex = '未知';
-            // }
             thee.data.input.sex = io.transformSex(thee.data.input.sex);
-            // if (String(thee.data.input.birthday) == 'NaN' || thee.data.input.birthday.length == 0) { //isNaN不好用
-            //     thee.data.input.birthday = 0;
-            // } else {
-            //     thee.data.input.birthday = (new Date(thee.data.input.birthday)).getTime();
-            // }
             thee.data.input.birthday = io.transformPickdate(thee.data.input.birthday);
             await user.update(thee.data.input);
             wx.navigateBack();
