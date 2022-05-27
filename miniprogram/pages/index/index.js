@@ -1,23 +1,18 @@
-// pages/index/index.js
-import {
-    Date2Str,
-} from '../../js/common/dateCalc.js';
+import * as io from '../../js/common/io';
 Page({
 
     /**
      * 页面的初始数据
      */
     data: {
-        testInfo: 'QwQ',
+
     },
 
     /**
      * 生命周期函数--监听页面加载
      */
     onLoad: async function (options) {
-        this.setData({
-            testInfo: Date2Str(new Date())
-        });
+        io.helpGoto(this, 'directory');
     },
 
     /**

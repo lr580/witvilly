@@ -192,7 +192,7 @@ export async function uploadImages(cnt = 9, root = imageRoot, abbr = true) {
     return imagePaths;
 }
 
-export async function uploads(src, dest) {
+export async function uploads(src, dest) {//有空可以用Promise.all重写
     let suc = 0;
     return await new Promise((res, rej) => {
         for (let i = 0; i < src.length; ++i) {
@@ -212,7 +212,7 @@ export async function uploads(src, dest) {
 }
 
 export function transformPickdate(val) { //将'yyyy-mm-dd'转时间戳
-    if (String(val) == 'NaN' || val.length == 0) { //isNaN不好用
+    if (String(val) == 'NaN' || val.length == 0 || val == '未设置') { //isNaN不好用
         val = 0;
     } else {
         val = (new Date(val)).getTime();
@@ -225,4 +225,16 @@ export function transformSex(val) {
         val = '未知';
     }
     return val;
+}
+
+export var col = null;
+export var _ = null;
+export var app = null;
+
+export function get_col(colname, force = false) {
+    if (!col || force) {
+        col = wx.cloud.database().collection(colname);
+        _ = wx.cloud.database().command;
+        app = getApp();
+    }
 }

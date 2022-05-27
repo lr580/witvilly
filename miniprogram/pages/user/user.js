@@ -1,17 +1,8 @@
 import * as io from '../../js/common/io';
 import * as user from '../../js/base/userCtrl';
 Page({
+    data: {},
 
-    /**
-     * 页面的初始数据
-     */
-    data: {
-        registered: false,
-    },
-
-    /**
-     * 生命周期函数--监听页面加载
-     */
     onLoad(options) {
         io.log('user页启动完毕');
         getApp().handler = this;
@@ -29,7 +20,8 @@ Page({
             user.refresh(thee);
         }, true);
         io.helpGoto(this, 'help');
-        io.helpGoto(this,'userInfo');
+        io.helpGoto(this, 'userInfo');
+        io.helpGoto(this, 'index');
     },
 
     /**

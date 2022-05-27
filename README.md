@@ -72,6 +72,7 @@
 cadre。主要是基层干部
 
 - `_openid` <u>ID</u> 
+- `_id` <u>时间戳</u> 注册日期 主键
 - `registerDate` <u>时间戳</u> 注册日期 主键
 - `avatar` <u>头像路径</u>
 - `name` string 真名
@@ -94,9 +95,10 @@ cadre。主要是基层干部
 
 people
 
-- `id` <u>时间戳</u> 创建日期 主键
+- `_id` <u>时间戳</u> 创建日期 主键
 - `_openid` <u>ID</u> 
 - `name` string 真名
+- `sex` <u>性别</u> 
 - `avatar` <u>头像路径</u> 
 - `birthday` <u>时间戳</u> 出生日期 
 - `income` string 收入描述
@@ -113,7 +115,7 @@ people
 
 memo
 
-- `id` <u>时间戳</u> 创建日期 主键
+- `_id` <u>时间戳</u> 创建日期 主键
 - `text` <u>富文本</u> 正文
 - `title` string 标题
 - `tags` array(<u>标签</u>)
@@ -133,7 +135,7 @@ accessory
 
 当前版本未实现。从属关系由拥有主体单向定义，不作冗余。
 
-- `id`  <u>时间戳</u> 主键
+- `_id`  <u>时间戳</u> 主键
 - `name` string 附件显示名
 - `desc` string 附件描述，可选
 
@@ -145,7 +147,7 @@ broadcast
 
 未来实现。
 
-- `id` <u>时间戳</u> 通知主键 创建日期
+- `_id` <u>时间戳</u> 通知主键 创建日期
 - `source` array(<u>时间戳</u>) 广播通知
 - `audience` array(<u>微信号</u>) 通知受众(群众或干部)
 - `sendDate` <u>时间戳</u> 发送日期
@@ -159,7 +161,7 @@ broadcast
 
 editlock
 
-- `id` <u>时间戳</u> 主键，编辑开始时间
+- `_id` <u>时间戳</u> 主键，编辑开始时间
 - `memoid` <u>时间戳</u> 外键
 - `cadreid` <u>时间戳</u> 外键
 
@@ -169,7 +171,7 @@ editlock
 
 plan
 
-- `id` <u>时间戳</u> 创建日期 主键
+- `_id` <u>时间戳</u> 创建日期 主键
 - `ddl` <u>时间戳</u> 截止日期
 - `start` <u>时间戳</u> 开始日期
 - `remind` <u>时间戳</u> 提醒日期
@@ -185,7 +187,7 @@ plan
 
 relative
 
-- `id` <u>时间戳</u> 创建日期 主键
+- `_id` <u>时间戳</u> 创建日期 主键
 - `type` <u>血缘类型</u>
 - `lfs` <u>时间戳</u> 拥有该关系的主语群众
 - `rfs` <u>时间戳</u> 拥有该关系的谓语群众
@@ -233,7 +235,13 @@ relative
 
 ##### user
 
+- `userInfo` 渲染后的用户数据
 
+##### userInfo
+
+- `userInfo` 渲染后的用户数据
+- `input` 输入的数据
+- `type` 传入的参数，注册为 `register`，否则为空
 
 
 
@@ -341,11 +349,13 @@ Object 功能拓展。[深复制参考](https://blog.csdn.net/weixin_46074961/ar
 
 
 
-##### upload
+##### randoms
 
-上传文件、图片等专用。
+随机造数据用，主要作调试。
 
-- 
+- `name(sex = 0, len = 0)`，生成随机名字，若 `sex=0` 性别随机， `1` 男， `2` 女。字库来源自分析[该网站](https://www.qqxiuzi.cn/zh/xingming/)，名长，若 `len=0` 则 0.3 概率得到 1，0.7 得到 2；姓名长=单姓长+名长
+- `choice(arr)` 从数组随机取出一个元素
+- `randint(a, b)` 获取区间 \[a,b\] 内随机整数
 
 
 
@@ -365,9 +375,9 @@ Object 功能拓展。[深复制参考](https://blog.csdn.net/weixin_46074961/ar
 
 
 
-##### cadreCtrl
+##### peopleCtrl
 
-
+通讯录群众信息控制。
 
 
 

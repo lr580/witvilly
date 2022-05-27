@@ -2,7 +2,7 @@
 import * as obj from '../common/obj';
 import * as io from '../common/io';
 import * as date from '../common/dateCalc';
-var col = null;
+export var col = null;
 var _ = null;
 var app = null;
 
@@ -34,13 +34,11 @@ export async function getUser() {
         io.err(err);
         return getTemplate('', -1);
     }
-    // if (app.handler) {
-    //     refresh(app.handler);
-    // } 不知道为什么在这里不行，但在app.js就可以
     return res;
 }
 
 var template = {
+    _id :0,
     _openid: '',
     registerDate: null,
     avatar: 'default.jpg',
@@ -63,7 +61,8 @@ function getTemplate(openid = '', userType = 0) {
     let tmp = obj.clone(template);
     tmp._openid = openid;
     tmp.userType = userType;
-    tmp.registerDate = (new Date()).getTime();
+    tmp.registerDate = (new Date()).getTime(); 
+    tmp._id = tmp.registerDate;
     return tmp;
 }
 

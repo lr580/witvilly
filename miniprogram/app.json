@@ -3,7 +3,8 @@
         "pages/user/user",
         "pages/index/index",
         "pages/userInfo/userInfo",
-        "pages/help/help"
+        "pages/help/help",
+        "pages/directory/directory"
     ],
     "window": {
         "backgroundColor": "#F6F6F6",

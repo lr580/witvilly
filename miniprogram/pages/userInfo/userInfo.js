@@ -1,17 +1,10 @@
 import * as io from '../../js/common/io';
 import * as user from '../../js/base/userCtrl';
 Page({
-
-    /**
-     * 页面的初始数据
-     */
     data: {
         type: '',
     },
 
-    /**
-     * 生命周期函数--监听页面加载
-     */
     onLoad(options) {
         if (options.type != null) {
             this.setData({
@@ -58,12 +51,8 @@ Page({
 
     },
 
-    /**
-     * 生命周期函数--监听页面显示
-     */
     onShow() {
         user.refresh(this);
-        // user.refresh(this, 'userInfo_raw', false);
     },
 
     /**

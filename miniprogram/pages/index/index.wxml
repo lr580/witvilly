@@ -1,2 +1,1 @@
-<h1>这是一个主页</h1>
-<view>调试内容{{testInfo}}</view>
+<button bindtap="goto_directory">点我去通讯录</button>
